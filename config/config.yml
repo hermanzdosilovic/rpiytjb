@@ -1,5 +1,10 @@
 production:
-  audio_player: 'omxplayer'
+  player:
+    start: 'omxplayer'
+    stop: 'omxplayer.bin'
 
 development:
-  audio_player: 'afplay'
+  player:
+    start: 'afplay'
+    stop: 'afplay'
+
