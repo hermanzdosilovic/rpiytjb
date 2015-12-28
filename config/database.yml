@@ -9,7 +9,7 @@ production:
   <<: *default
   database: rpiytjb_production
   username: rpiytjb_p
-  password: <%= ENV['RPIYTJB_P_PASSWORD']%>
+  password: <%= ENV['RPIYTJB_P_PASSWORD'] %>
 
 development:
   <<: *default
