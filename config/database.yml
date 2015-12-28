@@ -1,0 +1,21 @@
+default: &default
+  adapter: mysql2
+  encoding: utf8mb4
+  pool: 5
+  username: root
+  password:
+
+production:
+  <<: *default
+  database: rpiytjb_production
+  username: rpiytjb_p
+  password: <%= ENV['RPIYTJB_P_PASSWORD']%>
+
+development:
+  <<: *default
+  database: rpiytjb_development
+
+test:
+  <<: *default
+  database: rpiytjb_test
+
