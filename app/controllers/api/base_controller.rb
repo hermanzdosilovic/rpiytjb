@@ -1,10 +1,10 @@
 module Api
   class BaseController < RocketPants::Base
     def play
-      filename = YouTubeDownloader.download(params[:url])
-      head :bad_request and return if filename.nil?
+      video_info = YouTubeDownloader.download(params[:url])
+      head :bad_request and return if video_info.nil?
       AudioService.stop
-      AudioService.play(filename)
+      AudioService.play
       head :ok
     end
 
