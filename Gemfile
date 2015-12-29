@@ -8,6 +8,7 @@ gem 'dotenv-rails', '~> 2.0'
 
 group :development, :test do
   gem 'pry-rails', '~> 0.3.4'
+  gem 'annotate', '~> 2.6'
 end
 
 group :development do
