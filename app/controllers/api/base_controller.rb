@@ -7,5 +7,10 @@ module Api
       AudioService.play(filename)
       head :ok
     end
+
+    def stop
+      AudioService.stop
+      head :ok
+    end
   end
 end
