@@ -1,9 +1,9 @@
 module AudioService
-  def self.play
-    fork { `#{APP_CONFIG['player']['start']} audio.m4a && rm audio.m4a` }
+  def self.play(video)
+    fork { `#{APP_CONFIG['player']['start']} #{video.audio_path}` }
   end
 
   def self.stop
-    `killall #{APP_CONFIG['player']['stop']} && rm audio.m4a`
+    `killall #{APP_CONFIG['player']['stop']}`
   end
 end

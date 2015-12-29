@@ -14,4 +14,8 @@
 class Video < ActiveRecord::Base
   validates :video_id, :uploader_id, :title, :description, presence: true
   validates :video_id, uniqueness: true
+
+  def audio_path
+    'audio/' + video_id + '.m4a'
+  end
 end
