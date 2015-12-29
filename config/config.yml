@@ -1,10 +1,8 @@
 production:
-  player:
-    start: 'omxplayer'
-    stop: 'omxplayer.bin'
+  control: 'control'
+  pipe: 'tmp/lock.pipe'
 
 development:
-  player:
-    start: 'afplay'
-    stop: 'afplay'
+  control: 'control'
+  pipe: 'tmp/lock.pipe'
 
