@@ -19,8 +19,8 @@ module Api
     end
 
     def volume
-      AudioService.volume(params[:value])
-      head :ok
+      value = AudioService.volume(params[:value])
+      expose volume: value
     end
   end
 end
