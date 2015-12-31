@@ -4,7 +4,7 @@ require 'mina/git'
 require 'mina/rbenv'
 
 set :branch, 'master'
-set :deploy_to, '/var/www/rpiytjb_production'
+set :deploy_to, '/var/www/rpiytjb'
 set :domain, 'gitac.ddns.net'
 set :forward_agent, true
 set :port, '22219'
