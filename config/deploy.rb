@@ -20,6 +20,8 @@ task setup: :environment do
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/audio"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/audio"]
   queue! %[mkfifo "#{deploy_to}/#{shared_path}/control"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/audio"]
+  queue! %[touch "#{deploy_to}/#{shared_path}/.env"]
 end
 
 desc "Deploys the current version to the server."
