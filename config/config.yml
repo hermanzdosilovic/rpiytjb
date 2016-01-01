@@ -1,8 +1,8 @@
 production:
   control: 'control'
-  pipe: 'tmp/lock.pipe'
+  pipe: <%= Rails.root.join('tmp', 'lock.pipe') %>
 
 development:
   control: 'control'
-  pipe: 'tmp/lock.pipe'
+  pipe: <%= Rails.root.join('tmp', 'lock.pipe') %>
 

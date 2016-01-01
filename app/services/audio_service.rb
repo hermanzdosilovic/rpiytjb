@@ -2,7 +2,7 @@ module AudioService
   def self.play(video)
     `touch #{APP_CONFIG['pipe']}`
     fork do
-      `mplayer -slave -input file=#{APP_CONFIG['control']} -volume 50 #{video.audio_path}`
+      `mplayer -slave -input file=#{APP_CONFIG['control']} -nolirc -volume 50 #{video.audio_path}`
       `rm #{APP_CONFIG['pipe']}`
     end
   end
