@@ -14,6 +14,10 @@ module Rpiytjb
     def mutex
       @mutex ||= Mutex.new
     end
+
+    def remove_audio_service
+      @audio_service = nil
+    end
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

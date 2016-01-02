@@ -5,17 +5,14 @@ module Api
 
       @application.mutex.synchronize do
         video = YouTubeDownloader.download(params[:url])
-        if video.nil?
-          @application.audio_service = nil
-          head :bad_request and return
-        end
+        head :bad_request and return if video.nil?
 
         @application.audio_service.try(:stop)
         @application.audio_service = AudioService.new(video, params[:volume])
 
-        fork do
+        Thread.new do
           @application.audio_service.play
-          @application.audio_service = nil
+          @application.remove_audio_service
         end
 
         expose @application.audio_service
@@ -25,7 +22,7 @@ module Api
     def stop
       load_application
       @application.audio_service.try(:stop)
-      @application.audio_service = nil
+      @application.remove_audio_service
       expose @application.audio_service
     end
 

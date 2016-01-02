@@ -2,14 +2,18 @@ class AudioService
   DEFAULT_VOLUME = 50
 
   attr_reader :video
+  attr_reader :now_playing
 
   def initialize(video, volume = DEFAULT_VOLUME)
     @video = video
     @volume = (volume || DEFAULT_VOLUME).to_i
+    @now_playing = false
   end
 
   def play
+    @now_playing = true
     `mplayer -slave -input file=#{APP_CONFIG['control']} -nolirc -volume #{@volume} #{@video.audio_path}`
+    @now_playing = false
   end
 
   def stop
