@@ -18,7 +18,7 @@ module Api
           @application.audio_service = nil
         end
 
-        head :ok
+        expose @application.audio_service
       end
     end
 
@@ -26,19 +26,24 @@ module Api
       load_application
       @application.audio_service.try(:stop)
       @application.audio_service = nil
-      head :ok
+      expose @application.audio_service
     end
 
     def pause
       load_application
       @application.audio_service.try(:pause)
-      head :ok
+      expose @application.audio_service
     end
 
     def volume
       load_application
-      value = @application.audio_service.try(:change_volume, params[:value]) || AudioService::DEFAULT_VOLUME
-      expose volume: value
+      @application.audio_service.try(:change_volume, params[:value])
+      expose @application.audio_service
+    end
+
+    def now
+      load_application
+      expose @application.audio_service
     end
 
     private

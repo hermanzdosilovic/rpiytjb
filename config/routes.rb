@@ -3,6 +3,7 @@ Rails.application.routes.draw do
       get 'start', to: 'videos#start'
       get 'stop', to: 'videos#stop'
       get 'pause', to: 'videos#pause'
-      post 'volume', to: 'videos#volume'
+      get 'volume', to: 'videos#volume'
+      get 'now', to: 'videos#now'
   end
 end

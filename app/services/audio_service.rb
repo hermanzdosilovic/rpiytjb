@@ -1,6 +1,8 @@
 class AudioService
   DEFAULT_VOLUME = 50
 
+  attr_reader :video
+
   def initialize(video, volume = DEFAULT_VOLUME)
     @video = video
     @volume = (volume || DEFAULT_VOLUME).to_i
