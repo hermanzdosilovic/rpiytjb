@@ -1,8 +1,9 @@
-production:
+default: &default
   control: 'control'
-  pipe: <%= Rails.root.join('tmp', 'lock.pipe') %>
+
+production:
+  <<: *default
 
 development:
-  control: 'control'
-  pipe: <%= Rails.root.join('tmp', 'lock.pipe') %>
+  <<: *default
 

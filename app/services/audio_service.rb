@@ -1,36 +1,29 @@
-module AudioService
-  def self.play(video)
-    return if pipe_used?
-    `touch #{APP_CONFIG['pipe']}`
-    fork do
-      `mplayer -slave -input file=#{APP_CONFIG['control']} -nolirc -volume 50 #{video.audio_path} \
-      && rm #{APP_CONFIG['pipe']}`
-    end
+class AudioService
+  DEFAULT_VOLUME = 50
+
+  def initialize(video, volume = DEFAULT_VOLUME)
+    @video = video
+    @volume = (volume || DEFAULT_VOLUME).to_i
   end
 
-  def self.stop
-    return unless pipe_used?
+  def play
+    `mplayer -slave -input file=#{APP_CONFIG['control']} -nolirc -volume #{@volume} #{@video.audio_path}`
+  end
+
+  def stop
     `echo "quit" > #{APP_CONFIG['control']}`
-    `rm #{APP_CONFIG['pipe']}`
   end
 
-  def self.pause
-    return unless pipe_used?
+  def pause
     `echo "pause" > #{APP_CONFIG['control']}`
   end
 
-  def self.volume(value)
-    return 50 unless pipe_used?
+  def change_volume(value)
     value = value.to_i
     value = 0 if value < 0
     value = 100 if value > 100
+    @volume = value
     `echo "volume #{value} 1" > #{APP_CONFIG['control']}`
-    value
-  end
-
-  private
-
-  def self.pipe_used?
-    File.file?(APP_CONFIG['pipe'])
+    @volume
   end
 end

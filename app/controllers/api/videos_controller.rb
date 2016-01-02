@@ -1,26 +1,50 @@
 module Api
   class VideosController < BaseController
     def start
-      video = YouTubeDownloader.download(params[:url])
-      head :bad_request and return if video.nil?
-      AudioService.stop
-      AudioService.play(video)
-      head :ok
+      load_application
+
+      @application.mutex.synchronize do
+        video = YouTubeDownloader.download(params[:url])
+        if video.nil?
+          @application.audio_service = nil
+          head :bad_request and return
+        end
+
+        @application.audio_service.try(:stop)
+        @application.audio_service = AudioService.new(video, params[:volume])
+
+        fork do
+          @application.audio_service.play
+          @application.audio_service = nil
+        end
+
+        head :ok
+      end
     end
 
     def stop
-      AudioService.stop
+      load_application
+      @application.audio_service.try(:stop)
+      @application.audio_service = nil
       head :ok
     end
 
     def pause
-      AudioService.pause
+      load_application
+      @application.audio_service.try(:pause)
       head :ok
     end
 
     def volume
-      value = AudioService.volume(params[:value])
+      load_application
+      value = @application.audio_service.try(:change_volume, params[:value]) || AudioService::DEFAULT_VOLUME
       expose volume: value
+    end
+
+    private
+
+    def load_application
+      @application = Rails.application
     end
   end
 end
