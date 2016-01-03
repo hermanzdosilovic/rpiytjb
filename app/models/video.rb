@@ -12,7 +12,7 @@
 #
 
 class Video < ActiveRecord::Base
-  validates :video_id, :uploader_id, :title, :description, presence: true
+  validates :video_id, :uploader_id, :title, :description, :video_url, :download_url, presence: true
   validates :video_id, uniqueness: true
 
   has_many :playbacks

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160102213726) do
+ActiveRecord::Schema.define(version: 20160103013013) do
 
   create_table "playbacks", force: :cascade do |t|
     t.integer "video_id",   limit: 4
@@ -19,12 +19,14 @@ ActiveRecord::Schema.define(version: 20160102213726) do
   end
 
   create_table "videos", force: :cascade do |t|
-    t.string   "video_id",    limit: 255
-    t.string   "uploader_id", limit: 255
-    t.string   "title",       limit: 255
-    t.text     "description", limit: 65535
+    t.string   "video_id",     limit: 255
+    t.string   "uploader_id",  limit: 255
+    t.string   "title",        limit: 255
+    t.text     "description",  limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.text     "video_url",    limit: 65535
+    t.text     "download_url", limit: 65535
   end
 
 end
