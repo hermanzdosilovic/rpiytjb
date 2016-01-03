@@ -2,14 +2,16 @@ module YouTubeDownloader
   def self.fetch_info(url)
     return nil if url.nil? || url.match("https://www.youtube.com/").nil?
 
-    info = JSON.parse(`youtube-dl -j #{url}`)
-    Video.find_or_create_by(video_id: info['id']) do |v|
+    info = JSON.parse(`youtube-dl -x -j #{url}`)
+    video = Video.find_or_create_by(video_id: info['id']) do |v|
       v.title = info['title']
       v.description = info['description']
       v.uploader_id = info['uploader_id']
-      v.download_url = info['requested_formats'].last['url']
+      v.download_url = info['url']
       v.video_url = url
     end
+    video.update(download_url: info['url'])
+    video
   end
 
   def self.download(url)
