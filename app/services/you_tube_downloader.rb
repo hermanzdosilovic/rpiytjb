@@ -9,7 +9,7 @@ module YouTubeDownloader
     --buffer-size 16K --no-resize-buffer --audio-format m4a #{url}` unless File.file?(video.audio_path)
 
     video.save
-    video
+    Video.find_by(video_id: video.video_id)
   end
 
   private

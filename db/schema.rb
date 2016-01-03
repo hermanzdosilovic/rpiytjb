@@ -11,7 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151229121743) do
+ActiveRecord::Schema.define(version: 20160102213726) do
+
+  create_table "playbacks", force: :cascade do |t|
+    t.integer "video_id",   limit: 4
+    t.boolean "is_playing"
+  end
 
   create_table "videos", force: :cascade do |t|
     t.string   "video_id",    limit: 255
