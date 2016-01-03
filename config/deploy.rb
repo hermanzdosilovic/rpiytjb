@@ -12,7 +12,7 @@ set :rails_env, 'production'
 set :repository, 'git@github.com:hermanzdosilovic/rpiytjb.git'
 set :user, 'pi'
 
-set :shared_paths, %w{.env log audio control}
+set :shared_paths, %w{.env log audio control stream}
 
 task setup: :environment do
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/log"]
@@ -21,6 +21,7 @@ task setup: :environment do
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/audio"]
   queue! %[mkfifo "#{deploy_to}/#{shared_path}/control"]
   queue! %[touch "#{deploy_to}/#{shared_path}/.env"]
+  queue! %[mkfifo "#{deploy_to}/#{shared_path}/stream"]
 end
 
 desc "Deploys the current version to the server."

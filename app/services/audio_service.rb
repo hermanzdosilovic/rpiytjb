@@ -6,6 +6,12 @@ class AudioService
     `mplayer -slave -input file=#{APP_CONFIG['control']} -nolirc -volume #{volume} #{video.audio_path}`
   end
 
+  def self.stream(video, volume = DEFAULT_VOLUME)
+    volume = (volume || DEFAULT_VOLUME).to_i
+    Thread.new { `wget -q -O #{APP_CONFIG['stream']} #{video.download_url.shellescape}` }
+    `mplayer -slave -input file=control -cache 1024 -volume 50 -nolirc #{APP_CONFIG['stream']}`
+  end
+
   def self.stop
     `echo "quit" > #{APP_CONFIG['control']}`
   end
