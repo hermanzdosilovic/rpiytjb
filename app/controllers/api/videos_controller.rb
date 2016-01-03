@@ -5,16 +5,14 @@ module Api
         video = YouTubeDownloader.download(params[:url])
         head :bad_request and return if video.nil?
 
+        force_stop
+
         last_playback = Playback.last
-        AudioService.stop if last_playback.try(:is_playing)
-        last_playback.try(:update, is_playing: false)
+        playback = Playback.create(video_id: video.id, is_playing: true)
 
-        playback = last_playback.try(:video_id) != video.id ?
-          Playback.new(video_id: video.id) : last_playback
-        playback.is_playing = true
-        playback.save
+        last_playback.destroy if playback.video_id == last_playback.try(:video_id)
 
-        fork do
+        Thread.new do
           AudioService.play(video, params[:volume])
           playback.update(is_playing: false)
         end
@@ -36,8 +34,8 @@ module Api
     end
 
     def force_stop
-      AudioService.force_stop
       Playback.update_all(is_playing: false)
+      AudioService.force_stop
       expose nil
     end
 

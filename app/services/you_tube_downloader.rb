@@ -1,23 +1,23 @@
 module YouTubeDownloader
-  def self.download(url)
+  def self.fetch_info(url)
     return nil if url.nil? || url.match("https://www.youtube.com/").nil?
 
     info = JSON.parse(`youtube-dl -j #{url}`)
-    video = Video.new(video_info(info).merge({video_url: url}))
-
-    `youtube-dl -x -o "audio/%(id)s.%(ext)s" -r 4.2M \
-    --buffer-size 16K --no-resize-buffer --audio-format m4a #{url}` unless File.file?(video.audio_path)
-
-    video.save
-    Video.find_by(video_id: video.video_id)
+    Video.find_or_create_by(video_id: info['id']) do |v|
+      v.title = info['title']
+      v.description = info['description']
+      v.uploader_id = info['uploader_id']
+      v.download_url = info['requested_formats'].last['url']
+      v.video_url = url
+    end
   end
 
-  private
+  def self.download(url)
+    return nil if url.nil? || url.match("https://www.youtube.com/").nil?
 
-  def self.video_info(info)
-    attributes = info.slice('title', 'description', 'uploader_id')
-    attributes[:video_id] = info['id']
-    attributes[:download_url] = info['requested_formats'].last['url']
-    attributes
+    video = fetch_info(url)
+    `youtube-dl -x -o "audio/%(id)s.%(ext)s" -r 4.2M \
+    --buffer-size 16K --no-resize-buffer --audio-format m4a #{url}` unless File.file?(video.audio_path)
+    video
   end
 end
