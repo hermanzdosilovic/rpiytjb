@@ -15,7 +15,7 @@ module Rpiytjb
 
     config.active_record.raise_in_transactional_callbacks = true
     config.after_initialize do
-      Playback.update_all(is_playing: false)
+      Playback.update_all(is_playing: false) if Playback.table_exists?
     end
   end
 end
