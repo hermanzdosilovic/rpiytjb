@@ -2,19 +2,20 @@ module Api
   class VideosController < BaseController
     def start
       Rails.application.mutex.synchronize do
-        # video = YouTubeDownloader.download(params[:url])
         video = YouTubeDownloader.fetch_info(params[:url])
         head :bad_request and return if video.nil?
 
         force_stop
 
         last_playback = Playback.last
-        playback = Playback.create(video_id: video.id, is_playing: true)
-
-        last_playback.destroy if playback.video_id == last_playback.try(:video_id)
+        playback = last_playback
+	if last_playback.try(:video_id) != video.id
+          playback = Playback.create(video_id: video.id, is_playing: true)
+	else
+	  playback.update(is_playing: true)
+	end
 
         Thread.new do
-          # AudioService.play(video, params[:volume])
           AudioService.stream(video, params[:volume])
           playback.update(is_playing: false)
         end

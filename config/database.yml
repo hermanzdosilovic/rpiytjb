@@ -1,21 +1,18 @@
 default: &default
-  adapter: mysql2
-  encoding: utf8mb4
+  adapter: sqlite3
   pool: 5
-  username: root
-  password:
+  timeout: 5000
 
 production:
   <<: *default
   database: rpiytjb_production
-  username: rpiytjb_p
-  password: <%= ENV['RPIYTJB_P_PASSWORD'] %>
+  database: db/production.sqlite3
 
 development:
   <<: *default
-  database: rpiytjb_development
+  database: db/development.sqlite3
 
 test:
   <<: *default
-  database: rpiytjb_test
+  database: db/test.sqlite3
 

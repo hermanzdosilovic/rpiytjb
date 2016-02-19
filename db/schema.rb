@@ -14,19 +14,19 @@
 ActiveRecord::Schema.define(version: 20160103013013) do
 
   create_table "playbacks", force: :cascade do |t|
-    t.integer "video_id",   limit: 4
+    t.integer "video_id"
     t.boolean "is_playing"
   end
 
   create_table "videos", force: :cascade do |t|
-    t.string   "video_id",     limit: 255
-    t.string   "uploader_id",  limit: 255
-    t.string   "title",        limit: 255
-    t.text     "description",  limit: 65535
+    t.string   "video_id"
+    t.string   "uploader_id"
+    t.string   "title"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.text     "video_url",    limit: 65535
-    t.text     "download_url", limit: 65535
+    t.text     "video_url"
+    t.text     "download_url"
   end
 
 end
