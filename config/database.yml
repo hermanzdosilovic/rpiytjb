@@ -3,16 +3,7 @@ default: &default
   pool: 5
   timeout: 5000
 
-production:
-  <<: *default
-  database: rpiytjb_production
-  database: db/production.sqlite3
-
 development:
   <<: *default
   database: db/development.sqlite3
-
-test:
-  <<: *default
-  database: db/test.sqlite3
 

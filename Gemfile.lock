@@ -43,13 +43,10 @@ GEM
       hashie (>= 1.0, < 3.0)
       httparty
     arel (6.0.3)
-    binding_of_caller (0.7.2)
-      debug_inspector (>= 0.0.1)
     builder (3.2.2)
     coderay (1.1.0)
     concurrent-ruby (1.0.0)
     daemons (1.2.3)
-    debug_inspector (0.0.2)
     dotenv (2.0.2)
     dotenv-rails (2.0.2)
       dotenv (= 2.0.2)
@@ -134,11 +131,6 @@ GEM
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    web-console (2.2.1)
-      activemodel (>= 4.0)
-      binding_of_caller (>= 0.7.2)
-      railties (>= 4.0)
-      sprockets-rails (>= 2.0, < 4.0)
     will_paginate (3.0.7)
 
 PLATFORMS
@@ -152,7 +144,6 @@ DEPENDENCIES
   rocket_pants (~> 1.13)
   sqlite3 (~> 1.3)
   thin (~> 1.6)
-  web-console (~> 2.0)
 
 BUNDLED WITH
    1.11.2
