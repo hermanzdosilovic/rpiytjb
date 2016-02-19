@@ -1,10 +1,11 @@
 Rails.application.routes.draw do
   namespace :api do
+      get 'force_stop', to: 'videos#force_stop'
+      get 'now', to: 'videos#now'
+      get 'pause', to: 'videos#pause'
       get 'start', to: 'videos#start'
       get 'stop', to: 'videos#stop'
-      get 'pause', to: 'videos#pause'
       get 'volume', to: 'videos#volume'
-      get 'now', to: 'videos#now'
-      get 'force_stop', to: 'videos#force_stop'
+      get 'position', to: 'videos#position'
   end
 end

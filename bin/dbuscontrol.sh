@@ -30,6 +30,14 @@ status)
 	echo "Paused: $paused"
 	;;
 
+position)
+	position=`dbus-send --print-reply=literal --session --reply-timeout=500 --dest=org.mpris.MediaPlayer2.omxplayer /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Position`
+	[ $? -ne 0 ] && exit 1
+	position="$(awk '{print $2}' <<< "$position")"
+
+	echo $position
+	;;
+
 volume)
 	volume=`dbus-send --print-reply=double --session --reply-timeout=500 --dest=org.mpris.MediaPlayer2.omxplayer /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Volume ${2:+double:}$2`
 	[ $? -ne 0 ] && exit 1

@@ -26,6 +26,15 @@ class AudioService
     `#{CONTROL} volume #{volume/100.0}`
     volume
   end
+  
+  def self.position
+    microseconds = `#{CONTROL} position`.to_i
+    seconds = microseconds / 10**6
+    minutes = seconds / 60
+    hours = minutes / 60
+    seconds %= 60
+    sprintf "%02d:%02d:%02d", hours, minutes, seconds
+  end
 
   private
 
