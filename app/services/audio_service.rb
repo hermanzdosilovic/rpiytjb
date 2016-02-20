@@ -11,7 +11,7 @@ class AudioService
   end
   
   def self.radio(video)
-    `wget -qO - "#{video.download_url}" | avconv -y -i pipe:0 -vn -q:a 5 -f wav -ar 22050 -ac 1 pipe:1 | sudo #{RADIO} -f 108.1 -`
+    `wget -qO - "#{video.download_url}" | avconv -y -i pipe:0 -vn -q:a 5 -f wav -ar 22050 -ac 1 pipe:1 | sudo #{RADIO} -f 108.0 -`
   end
 
   def self.stop
