@@ -1,6 +1,7 @@
 class AudioService
   DEFAULT_VOLUME = 50
   CONTROL = Rails.root.join("bin/dbuscontrol.sh")
+  RADIO = Rails.root.join("bin/fm_transmitter")
 
   def self.stream(video, volume = DEFAULT_VOLUME)
     volume = fix_volume(volume || DEFAULT_VOLUME)/100.0
@@ -8,13 +9,19 @@ class AudioService
     volume = 2000.0 * Math.log10(volume)
     `omxplayer --audio_queue=10 --vol #{volume} "#{video.download_url}"`
   end
+  
+  def self.radio(video)
+    `wget -qO - "#{video.download_url}" | avconv -y -i pipe:0 -vn -q:a 5 -f wav -ar 22050 -ac 1 pipe:1 | sudo #{RADIO} -f 108.1 -`
+  end
 
   def self.stop
     `#{CONTROL} stop`
+    `sudo killall fm_transmitter`
   end
 
   def self.force_stop
     `killall -9 omxplayer.bin`
+    `sudo killall fm_transmitter`
   end
 
   def self.pause

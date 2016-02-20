@@ -16,8 +16,13 @@ module Api
 	    else
 	      playback.update(is_playing: true)
 	    end
-	
-	    AudioService.stream(video, params[:volume])
+
+            if params[:radio].to_s == "true"
+	      AudioService.radio(video)
+            else
+	      AudioService.stream(video, params[:volume])
+            end
+
 	    playback.update(is_playing: false)
           end
 	end
