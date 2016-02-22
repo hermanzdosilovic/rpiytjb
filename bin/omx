@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# wait omxplayer to start
+function wait_omxplayer {
+    ./bin/dbuscontrol.sh status 2> /dev/null
+    while [[ $? -ne 0 ]]; do
+        ./bin/dbuscontrol.sh status 2> /dev/null
+    done
+}
+
+# convert microseconds to hh:mm:ss
+function convert {
+    seconds=$(( $1 / 1000000 ))
+    minutes=$(( $seconds / 60 ))
+    hours=$(( $minutes / 60 ))
+    seconds=$(( $seconds % 60 ))
+    printf "%02d:%02d:%02d" $hours $minutes $seconds
+}
+
+omxplayer --vol $1 $2 &
+wait_omxplayer
+
+duration="$(./bin/dbuscontrol.sh duration 2> /dev/null)"
+lastPosition="$(./bin/dbuscontrol.sh position 2> /dev/null)"
+while [[ $(( $duration - $lastPosition )) -gt 1000000 ]]; do
+    position="$(./bin/dbuscontrol.sh position 2> /dev/null)"
+    if [[ $? -ne 0 ]]; then
+        omxplayer --vol $1 --pos "$(convert $(( $lastPosition )))" $2 &
+        wait_omxplayer
+    else
+        lastPosition=$position
+    fi
+    sleep 100
+done

@@ -2,12 +2,13 @@ class AudioService
   DEFAULT_VOLUME = 50
   CONTROL = Rails.root.join("bin/dbuscontrol.sh")
   RADIO = Rails.root.join("bin/fm_transmitter")
+  PLAYER = Rails.root.join("bin/omx")
 
   def self.stream(video, volume = DEFAULT_VOLUME)
     volume = fix_volume(volume || DEFAULT_VOLUME)/100.0
     volume += 0.00001
     volume = 2000.0 * Math.log10(volume)
-    `omxplayer --audio_queue=10 --vol #{volume} "#{video.download_url}"`
+    `#{PLAYER} #{volume} "#{video.download_url}"` # params: volume, url
   end
   
   def self.radio(video)
@@ -15,13 +16,13 @@ class AudioService
   end
 
   def self.stop
-    `#{CONTROL} stop`
-    `sudo killall fm_transmitter`
+    `killall omx 2> /dev/null && killall omxplayer.bin 2> /dev/null`
+    `sudo killall fm_transmitter 2> /dev/null`
   end
 
   def self.force_stop
-    `killall -9 omxplayer.bin`
-    `sudo killall fm_transmitter`
+    `killall -9 omx 2> /dev/null && killall -9 omxplayer.bin 2> /dev/null`
+    `sudo killall fm_transmitter 2> /dev/null`
   end
 
   def self.pause
@@ -34,7 +35,7 @@ class AudioService
     volume
   end
   
-  def self.position
+  def self.current_position
     microseconds = `#{CONTROL} position`.to_i
     seconds = microseconds / 10**6
     minutes = seconds / 60

@@ -83,7 +83,7 @@ module Api
         return
       end
 
-      expose position: AudioService.position, server_time: Time.now.strftime("%H:%M:%S")
+      expose position: AudioService.current_position, server_time: Time.now.strftime("%H:%M:%S")
     end
 
     private

@@ -30,6 +30,24 @@ status)
 	echo "Paused: $paused"
 	;;
 
+paused)
+	playstatus=`dbus-send --print-reply=literal --session --reply-timeout=500 --dest=org.mpris.MediaPlayer2.omxplayer /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.PlaybackStatus`
+	[ $? -ne 0 ] && exit 1
+	playstatus="$(sed 's/^ *//;s/ *$//;' <<< "$playstatus")"
+
+	paused="true"
+	[ "$playstatus" == "Playing" ] && paused="false"
+	echo $paused
+	;;
+
+duration)
+	duration=`dbus-send --print-reply=literal --session --reply-timeout=500 --dest=org.mpris.MediaPlayer2.omxplayer /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Duration`
+	[ $? -ne 0 ] && exit 1
+	duration="$(awk '{print $2}' <<< "$duration")"
+
+	echo $duration
+	;;
+
 position)
 	position=`dbus-send --print-reply=literal --session --reply-timeout=500 --dest=org.mpris.MediaPlayer2.omxplayer /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Position`
 	[ $? -ne 0 ] && exit 1
