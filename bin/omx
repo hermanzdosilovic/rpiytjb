@@ -10,10 +10,10 @@ function wait_omxplayer {
 
 # convert microseconds to hh:mm:ss
 function convert {
-  seconds=$(( $1 / 1000000 ))
-  minutes=$(( $seconds / 60 ))
-  hours=$(( $minutes / 60 ))
-  seconds=$(( $seconds % 60 ))
+  seconds=$(($1 / 1000000))
+  minutes=$(($seconds % 3600 / 60))
+  hours=$(($seconds / 3600))
+  seconds=$(($seconds % 3600 % 60 ))
   printf "%02d:%02d:%02d" $hours $minutes $seconds
 }
 

@@ -16,32 +16,29 @@ class AudioService
   end
 
   def self.stop
-    `killall omx 2> /dev/null && killall omxplayer.bin 2> /dev/null`
-    `sudo killall fm_transmitter 2> /dev/null`
+    `killall omx 2>/dev/null && killall omxplayer.bin 2>/dev/null`
+    `sudo killall fm_transmitter 2>/dev/null`
   end
 
   def self.force_stop
-    `killall -9 omx 2> /dev/null && killall -9 omxplayer.bin 2> /dev/null`
-    `sudo killall fm_transmitter 2> /dev/null`
+    `killall -9 omx 2>/dev/null && killall -9 omxplayer.bin 2>/dev/null`
+    `sudo killall fm_transmitter 2>/dev/null`
   end
 
   def self.pause
-    `#{CONTROL} pause`
+    run("#{CONTROL} pause 2>/dev/null")
   end
 
   def self.change_volume(value)
     volume = fix_volume(value)
-    `#{CONTROL} volume #{volume/100.0}`
+    run("#{CONTROL} volume #{volume/100.0} 2>/dev/null")
     volume
   end
   
   def self.current_position
-    microseconds = `#{CONTROL} position`.to_i
-    seconds = microseconds / 10**6
-    minutes = seconds / 60
-    hours = minutes / 60
-    seconds %= 60
-    sprintf "%02d:%02d:%02d", hours, minutes, seconds
+    microseconds = run("#{CONTROL} position 2>/dev/null").to_i
+    seconds = microseconds/10**6
+    sprintf "%02d:%02d:%02d", seconds/3600, seconds%3600/60, seconds%3600%60
   end
 
   private
@@ -51,5 +48,9 @@ class AudioService
     value = 0 if value < 0
     value = 100 if value > 100
     value
+  end
+
+  def self.run(command)
+    `#{command}; while [ $? -ne 0 ]; do #{command}; done`
   end
 end
