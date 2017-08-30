@@ -2,7 +2,7 @@ class AudioService
   DEFAULT_VOLUME = 50
   CONTROL = Rails.root.join("bin/dbuscontrol.sh")
   RADIO = Rails.root.join("bin/fm_transmitter")
-  PLAYER = Rails.root.join("bin/omx")
+  PLAYER = Rails.root.join("bin/omxplayer.sh")
 
   def self.stream(video, volume = DEFAULT_VOLUME)
     volume = fix_volume(volume || DEFAULT_VOLUME)/100.0
@@ -16,27 +16,27 @@ class AudioService
   end
 
   def self.stop
-    `killall omx 2>/dev/null && killall omxplayer.bin 2>/dev/null`
-    `sudo killall fm_transmitter 2>/dev/null`
+    `sudo #{CONTROL} stop 2>/dev/null`
+    # `sudo killall fm_transmitter 2>/dev/null`
   end
 
   def self.force_stop
-    `killall -9 omx 2>/dev/null && killall -9 omxplayer.bin 2>/dev/null`
-    `sudo killall fm_transmitter 2>/dev/null`
+    `sudo killall omxplayer.bin`
+    # `sudo killall fm_transmitter 2>/dev/null`
   end
 
   def self.pause
-    run("#{CONTROL} pause 2>/dev/null")
+    run("sudo #{CONTROL} pause 2>/dev/null")
   end
 
   def self.change_volume(value)
     volume = fix_volume(value)
-    run("#{CONTROL} volume #{volume/100.0} 2>/dev/null")
+    run("sudo #{CONTROL} volume #{volume/100.0} 2>/dev/null")
     volume
   end
   
   def self.current_position
-    microseconds = run("#{CONTROL} position 2>/dev/null").to_i
+    microseconds = run("sudo #{CONTROL} position 2>/dev/null").to_i
     seconds = microseconds/10**6
     sprintf "%02d:%02d:%02d", seconds/3600, seconds%3600/60, seconds%3600%60
   end
@@ -51,6 +51,6 @@ class AudioService
   end
 
   def self.run(command)
-    `#{command}; while [ $? -ne 0 ]; do #{command}; done`
+    `#{command}`#; while [ $? -ne 0 ]; do #{command}; done`
   end
 end

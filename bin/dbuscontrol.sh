@@ -1,7 +1,7 @@
 #!/bin/bash
 
-OMXPLAYER_DBUS_ADDR="/tmp/omxplayerdbus.${USER}"
-OMXPLAYER_DBUS_PID="/tmp/omxplayerdbus.${USER}.pid"
+OMXPLAYER_DBUS_ADDR="/tmp/omxplayerdbus.root"
+OMXPLAYER_DBUS_PID="/tmp/omxplayerdbus.root.pid"
 export DBUS_SESSION_BUS_ADDRESS=`cat $OMXPLAYER_DBUS_ADDR`
 export DBUS_SESSION_BUS_PID=`cat $OMXPLAYER_DBUS_PID`
 
@@ -43,7 +43,7 @@ position)
 	;;
 
 volume)
-	volume=`dbus-send --print-reply=double --session --reply-timeout=500 --dest=org.mpris.MediaPlayer2.omxplayer /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Volume ${2:+double:}$2`
+	volume=`dbus-send --print-reply=literal --session --reply-timeout=500 --dest=org.mpris.MediaPlayer2.omxplayer /org/mpris/MediaPlayer2 org.freedesktop.DBus.Properties.Volume ${2:+double:}$2`
 	[ $? -ne 0 ] && exit 1
 	volume="$(awk '{print $2}' <<< "$volume")"
 	echo $volume
